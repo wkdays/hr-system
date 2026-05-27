@@ -67,3 +67,21 @@ export function calculateOT(
 
   return { OT1, OT2 };
 }
+
+export function calculateOTFromMinutes(totalMinutes: number): OvertimeResult {
+  const defaultResult: OvertimeResult = { OT1: 0, OT2: 0 };
+
+  if (totalMinutes < 15) return defaultResult;
+
+  if (totalMinutes < 60) return { OT1: 0.5, OT2: 0 };
+
+  if (totalMinutes === 60) return { OT1: 1.0, OT2: 0 };
+
+  const OT1 = 1.0;
+  const remaining = totalMinutes - 60;
+  const fullHours = Math.floor(remaining / 60);
+  const extra15Units = Math.floor((remaining % 60) / 15);
+  const OT2 = fullHours * 1.0 + extra15Units * 0.5;
+
+  return { OT1, OT2 };
+}
